@@ -295,3 +295,70 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+// ------------------------ Gallery ---------------------
+
+navGalleryGameBtn.addEventListener('click', openGallery)
+
+function openGallery() {
+  pauseAnswer();
+  pauseGallery();
+  pauseQuestion();
+  welcomeScreen.classList.add('hidden-block');
+  document.querySelectorAll('.header__nav-item').forEach((item) => {
+    item.classList.remove('header__nav-item_current');
+  })
+  navGalleryGameBtn.classList.add('header__nav-item_current');
+  welcomeScreen.classList.add('disabled-block');
+  mainGameBlock.classList.add('disabled-block');
+  headerScore.classList.add('hidden-block');
+  mainWinBlock.classList.add('disabled-block');
+  updateTimeGallery();
+  document.querySelector('.main__gallery').classList.remove('disabled-block');
+}
+
+document.querySelectorAll('.gallery__level').forEach((level) => {
+  level.addEventListener('click', selectGalleryLevel)
+})
+
+function selectGalleryLevel(element) {
+  galleryLevelSelected = Array.from(element.target.parentNode.children).indexOf(element.target);
+  document.querySelectorAll('.gallery__level').forEach((level) => {
+    level.classList.remove('gallery__level_selected');
+  })
+  element.target.classList.add('gallery__level_selected');
+  galleryBirdSelected = 0;
+  selectGalleryBird(0);
+}
+
+document.querySelectorAll('.gallery__bird').forEach((bird) => {
+  bird.addEventListener('click', selectGalleryBird)
+})
+
+function selectGalleryBird(element) {
+  if (element !== 0) {
+    galleryBirdSelected = Array.from(element.target.parentNode.children).indexOf(element.target);
+  }
+  document.querySelectorAll('.gallery__bird').forEach((bird, index) => {
+    bird.textContent = birdsData[lang][galleryLevelSelected][index].name;
+    bird.classList.remove('gallery__bird_selected');
+  })
+  if (element !== 0){
+    element.target.classList.add('gallery__bird_selected');
+  } else {
+    document.querySelectorAll('.gallery__bird')[0].classList.add('gallery__bird_selected');
+  }
+  updateGalleryBird()
+}
+
+function updateGalleryBird(){
+  document.querySelector('.gallery__selected-bird-img').src =  birdsData[lang][galleryLevelSelected][galleryBirdSelected].image;
+  document.querySelector('.gallery__selected-bird-title').textContent = birdsData[lang][galleryLevelSelected][galleryBirdSelected].name;
+  document.querySelector('.gallery__selected-bird-name').textContent = birdsData[lang][galleryLevelSelected][galleryBirdSelected].species;
+  document.querySelector('.gallery__info').textContent = birdsData[lang][galleryLevelSelected][galleryBirdSelected].description;
+  galleryAudio.src = birdsData[lang][galleryLevelSelected][galleryBirdSelected].audio;
+  galleryAudioSeekbar.min = 0;
+  galleryAudioSeekbar.max = galleryAudio.duration;
+  galleryAudioPlayBtn.classList.remove('gallery__audio-play-btn_pause');
+  galleryAudioSeekbar.style.backgroundSize = '0% 100%';
+}
