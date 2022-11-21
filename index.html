@@ -31,6 +31,74 @@
         <button class="main__welcome-btn">Начать игру</button>
       <img class="main__welcome-img" src="assets/images/welcome.jpg" alt="parrot with microphone">
     </section>
+    <section class="main__game disabled-block">
+      <ul class="game__levels">
+        <li class="game__level">Разминка</li>
+        <li class="game__level">Воробьиные</li>
+        <li class="game__level">Лесные птицы</li>
+        <li class="game__level">Певчие птицы</li>
+        <li class="game__level">Хищные птицы</li>
+        <li class="game__level">Морские птицы</li>
+      </ul>
+      <div class="game__question">
+        <img class="question__img" src="assets/images/unknown-bird.png" alt="unknown bird">
+        <div class="question__desription">
+          <h2 class="question__title">*****</h2>
+          <audio scr="" class="question__audio" preload="metadata">Audio is not supported.</audio>
+          <div class="question__audio-controls">
+            <div class="question__audio-play-btn"></div>
+            <div class="question__audio-seekbar-wrapper">
+              <input class="question__audio-seekbar" type="range" step="any" value="0">
+              <div class="question__audio-time">
+                <div class="question__audio-time-current">--:--</div>
+                <div class="question__audio-time-total">--:--</div>
+              </div>
+              <div class="question__audio-volume-wrapper">
+                <input class="question__audio-volume" type="range" min="0" max="1" step="0.1" value="1">
+                <div class="question__audio-volume-ico"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="game__answers-wrapper">
+        <ul class="game__answers">
+          <li class="game__answer">answer1</li>
+          <li class="game__answer">answer2</li>
+          <li class="game__answer">answer3</li>
+          <li class="game__answer">answer4</li>
+          <li class="game__answer">answer5</li>
+          <li class="game__answer">answer6</li>
+        </ul>
+        <div class="game__selected-answer">
+          <div class="selected-answer__wrapper disabled-block" >
+            <img class="selected-answer__img" src="assets/images/unknown-bird.png" alt="unknown bird">
+            <div class="selected-answer__desription">
+              <h2 class="selected-answer__title">Name</h2>
+              <p class="selected-answer__name">Surname</p>
+              <audio scr="" class="selected-answer__audio" preload="metadata">Audio is not supported.</audio>
+              <div class="selected-answer__audio-controls">
+                <div class="selected-answer__audio-play-btn"></div>
+                <div class="selected-answer__audio-seekbar-wrapper">
+                  <input class="selected-answer__audio-seekbar" type="range" step="any" value="0">
+                  <div class="selected-answer__audio-time">
+                    <div class="selected-answer__audio-time-current">--:--</div>
+                    <div class="selected-answer__audio-time-total">--:--</div>
+                  </div>
+                  <div class="selected-answer__audio-volume-wrapper">
+                    <input class="selected-answer__audio-volume" type="range" min="0" max="1" step="0.1" value="1">
+                    <div class="selected-answer__audio-volume-ico"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="selected-answer__info disabled-block">text</p>
+          <p class="selected-answer__placeholder">placeholder</p>
+        </div>
+      </div>
+      <button class="game__next-btn game__next-btn_disabled">Следующий уровень</button>
+    </section>
   </main>
 </body>
 </html>
