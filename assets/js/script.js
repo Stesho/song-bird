@@ -554,3 +554,44 @@ function updateTimeAnswer() {
   answerAudioSeekbar.style.backgroundSize = 
     (answerAudioSeekbar.value - answerAudioSeekbar.min) * 100 / (answerAudioSeekbar.max - answerAudioSeekbar.min) + '% 100%';
 }
+
+// -------------------------------------- gallery player
+
+galleryAudioPlayBtn.addEventListener('click', playGallery);
+
+function playGallery(){
+  if (galleryAudio.paused) {
+    galleryAudio.play();
+    galleryAudioPlayBtn.classList.add('gallery__audio-play-btn_pause');
+  } else if (galleryAudio.ended) {
+    galleryAudio.currentTime = 0;
+    galleryAudio.play();
+    galleryAudioPlayBtn.classList.add('gallery__audio-play-btn_pause');
+  } else {
+    galleryAudio.pause();
+    galleryAudioPlayBtn.classList.remove('gallery__audio-play-btn_pause');
+  }
+}
+
+function pauseGallery(){
+  galleryAudio.pause();
+  galleryAudioPlayBtn.classList.remove('gallery__audio-play-btn_pause');
+}
+
+galleryAudioSeekbar.addEventListener('input', () => {
+  galleryAudio.currentTime = galleryAudioSeekbar.value;
+})
+
+galleryAudio.addEventListener('timeupdate', updateTimeGallery);
+
+function updateTimeGallery() {
+  galleryAudio.onloadedmetadata = function() {
+    document.querySelector('.gallery__audio-time-total').textContent = getTime(galleryAudio.duration);
+  }
+  document.querySelector('.gallery__audio-time-current').textContent = getTime(galleryAudio.currentTime);
+  galleryAudioSeekbar.min = 0;
+  galleryAudioSeekbar.max = galleryAudio.duration;
+  galleryAudioSeekbar.value = galleryAudio.currentTime;
+  galleryAudioSeekbar.style.backgroundSize =
+    (galleryAudioSeekbar.value - galleryAudioSeekbar.min) * 100 / (galleryAudioSeekbar.max - galleryAudioSeekbar.min) + '% 100%';
+}
