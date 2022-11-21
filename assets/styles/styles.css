@@ -639,3 +639,46 @@
   border-radius: 5px;
   background-color: #303030;
 }
+
+.footer__nav-block {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10%;
+  margin-top: 25px;
+  padding: 0px 16px;
+}
+
+.footer__nav-link {
+  text-decoration: none;
+  color: #ffffff;
+  transition: 0.2s;
+}
+
+.footer__nav-link:hover {
+  text-decoration: none;
+  color: #00bc8c;
+}
+
+.footer__lang {
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.footer__lang:hover {
+  color: #00bc8c;
+}
+
+.footer__lang_active {
+  color: #00bc8c;
+  pointer-events: none;
+}
+
+.hidden-block {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.disabled-block {
+  display: none;
+}
