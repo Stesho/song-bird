@@ -520,3 +520,122 @@
   background: url(../images/sound-muted.png) no-repeat;
   background-size: 100%;
 }
+
+.gallery__selected-bird-title {
+  font-size: 26px;
+}
+
+.gallery__info {
+  margin-top: 20px;
+}
+
+.game__next-btn {
+  margin-top: 25px;
+  display: block;
+  width: 100%;
+  background-color: #008966;
+  border: 1px solid #444444;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.game__next-btn:hover {
+  background-color: #00aa7f;
+  border: 1px solid #555555;
+  cursor: pointer;
+}
+
+.game__next-btn_disabled {
+  background-color: #303030 !important;
+  pointer-events: none;
+}
+
+.main__win {
+  background-color: #303030;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  margin-top: 25px;
+  padding: 64px 16px 32px;
+}
+
+.main__win-title {
+  font-size: 58px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.main__win-text, .main__win-text-wrapper {
+  margin-top: 50px;
+  font-size: 18px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.main__win-btn {
+  margin: auto;
+  margin-top: 50px;
+  display: block;
+  width: 100%;
+  background-color: #008966;
+  border: 1px solid #444444;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.main__win-btn:hover {
+  background-color: #00aa7f;
+  border: 1px solid #555555;
+  cursor: pointer;
+}
+
+.main__gallery {
+  margin-top: 25px;
+}
+
+.gallery__selector-wrapper {
+  display: flex;
+  gap: 25px;
+}
+
+.gallery__levels, .gallery__birds {
+  flex-grow: 1;
+  border-radius: 5px;
+  background-color: #303030;
+  border: 1px solid #444444;
+  overflow: hidden;
+}
+
+.gallery__level, .gallery__bird {
+  padding: 16px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.gallery__level:not(:last-child), .gallery__bird:not(:last-child) {
+  border-bottom: 1px solid #444444;
+}
+
+.gallery__level:hover, .gallery__bird:hover {
+  background-color: #444444;
+}
+
+.gallery__level_selected, .gallery__bird_selected {
+  background-color: #008966;
+}
+
+.gallery__level_selected:hover, .gallery__bird_selected:hover {
+  background-color: #00aa7f;
+}
+
+.gallery__selected-bird {
+  margin-top: 25px;
+  padding: 32px 16px;
+  border-radius: 5px;
+  background-color: #303030;
+}
