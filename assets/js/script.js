@@ -137,3 +137,161 @@ function setLanguage() {
 }
 
 setLanguage()
+
+// ----------------------------- main page -----------------
+
+navHove.addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+
+startGameBtn.addEventListener('click', startGame);
+navStartGameBtn.addEventListener('click', startGame);
+mainWinBtn.addEventListener('click', reStartGame);
+
+function startGame() {
+  pauseAnswer();
+  pauseGallery();
+  pauseQuestion();
+  currentLevel = 0;
+  scoreTotal = 0;
+  welcomeScreen.classList.add('hidden-block');
+  document.querySelectorAll('.header__nav-item').forEach((item) => {
+    item.classList.remove('header__nav-item_current');
+  })
+  document.querySelectorAll('.game__level').forEach((item) => {
+    item.classList.remove('game__level_current');
+  })
+  gameLevels.children[currentLevel].classList.add('game__level_current');
+  navStartGameBtn.classList.add('header__nav-item_current');
+  document.querySelector('.main__gallery').classList.add('disabled-block');
+  welcomeScreen.classList.add('disabled-block');
+  mainWinBlock.classList.add('disabled-block');
+  mainGameBlock.classList.remove('disabled-block');
+  headerScore.classList.remove('hidden-block');
+  headerScore.children[1].textContent = scoreTotal;
+  startLevel(currentLevel);
+}
+
+function startLevel(level) {
+  answerCorrect = getRandomInt(0, birdsData[lang][level].length - 1);
+  console.log('correct answer: ', answerCorrect + 1);
+  answersState = [0, 0, 0, 0, 0, 0]; // 0 - unclicked, 1 - clicked (wrong), 2 - clicked (right)
+  updateQuestion();
+  updateQuestionAudio(birdsData[lang][currentLevel][answerCorrect]);
+  updateTimeQuestion();
+  updateSelectedAnswer();
+  gameAnswers.innerHTML = '';
+  birdsData[lang][level].forEach( (element, index) => {
+    let li = document.createElement('li');
+    li.className = 'game__answer';
+    li.textContent = element.name;
+    li.addEventListener('click', selectAnswer);
+    gameAnswers.append(li);
+  });
+}
+
+function selectAnswer (element) {
+  answerSelected = Array.from(element.target.parentNode.children).indexOf(element.target);
+  updateSelectedAnswer(birdsData[lang][currentLevel][answerSelected])
+  if (answersState[answerSelected] === 0) {
+    if (answerSelected === answerCorrect) {
+      pauseQuestion();
+      playSoundEffect('right');
+      answersState[answerSelected] = 2;
+      let scoreAdd = answersState.filter(value => value === 0).length;
+      scoreTotal += scoreAdd;
+      element.target.classList.add('game__answer_right');
+      element.target.textContent += ` +${scoreAdd}`
+      updateQuestion(birdsData[lang][currentLevel][answerCorrect]);
+      headerScore.children[1].textContent = scoreTotal;
+      nextLevelBtn.classList.remove('game__next-btn_disabled');
+      nextLevelBtn.addEventListener('click', startNextLevel);
+    } else {
+      answersState[answerSelected] = 1;
+      if (answersState[answerCorrect] !== 2) {
+        playSoundEffect('wrong');
+        element.target.classList.add('game__answer_wrong');
+      }
+    }
+  }
+}
+
+function startNextLevel(){
+  pauseAnswer();
+  pauseQuestion();
+  gameLevels.children[currentLevel].classList.remove('game__level_current');
+  questionAudioSeekbar.style.backgroundSize = '0% 100%';
+  currentLevel++;
+  nextLevelBtn.classList.add('game__next-btn_disabled');
+  nextLevelBtn.removeEventListener('click', startNextLevel);
+  if (currentLevel === 6){
+    playSoundEffect('victory');
+    showresults();
+  } else {
+    gameLevels.children[currentLevel].classList.add('game__level_current');
+    startLevel(currentLevel);
+  }
+}
+
+function updateQuestion(bird = ''){
+  if (bird === '') {
+    questionImg.src = 'assets/images/unknown-bird.png';
+    questionTitle.textContent = '*****';
+  } else {
+    questionImg.src = bird.image;
+    questionTitle.textContent = bird.name;
+  }
+}
+
+function updateSelectedAnswer(bird = ''){
+  if (bird === '') {
+    gameSelectedAnswerInfo.classList.add('disabled-block');
+    gameSelectedAnswerWrapper.classList.add('disabled-block');
+    document.querySelector('.selected-answer__placeholder').classList.remove('disabled-block');
+    answerAudio.src = '';
+  } else {
+    gameSelectedAnswerImg.src = bird.image;
+    gameSelectedAnswerTitle.textContent = bird.name;
+    gameSelectedAnswerName.textContent = bird.species;
+    gameSelectedAnswerInfo.textContent = bird.description;
+    answerAudio.src = bird.audio;
+    answerAudioSeekbar.min = 0;
+    answerAudioSeekbar.max = answerAudio.duration;
+    answerAudioPlayBtn.classList.remove('selected-answer__audio-play-btn_pause');
+    answerAudioSeekbar.style.backgroundSize = '0% 100%';
+    document.querySelector('.selected-answer__placeholder').classList.add('disabled-block');
+    gameSelectedAnswerWrapper.classList.remove('disabled-block')
+    gameSelectedAnswerInfo.classList.remove('disabled-block');
+  }
+}
+
+function showresults() {
+  if (scoreTotal === 30) {
+    document.querySelector('.main__win-text').classList.remove('disabled-block');
+    document.querySelector('.main__win-text2').classList.add('disabled-block');
+    document.querySelector('.main__win-text3').classList.add('disabled-block');
+    document.querySelector('.main__win-text4').classList.add('disabled-block');
+    mainWinBtn.classList.add('hidden-block');
+  } else {
+    document.querySelector('.main__win-text3').textContent = scoreTotal;
+    document.querySelector('.main__win-text').classList.add('disabled-block');
+    document.querySelector('.main__win-text2').classList.remove('disabled-block');
+    document.querySelector('.main__win-text3').classList.remove('disabled-block');
+    document.querySelector('.main__win-text4').classList.remove('disabled-block');
+    mainWinBtn.classList.remove('hidden-block');
+  }
+  mainGameBlock.classList.add('disabled-block');
+  mainWinBlock.classList.remove('disabled-block');
+}
+
+function reStartGame() {
+  mainWinBlock.classList.add('disabled-block');
+  gameLevels.children[0].classList.add('game__level_current');
+  startGame();
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
