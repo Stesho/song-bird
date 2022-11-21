@@ -511,3 +511,46 @@ function muteSound() {
     }
   }
 }
+
+//---------------------------------   2nd player
+
+answerAudioPlayBtn.addEventListener('click', playAnswer);
+
+function playAnswer(){
+  if (answerAudio.paused) {
+    pauseQuestion();
+    answerAudio.play();
+    answerAudioPlayBtn.classList.add('selected-answer__audio-play-btn_pause');
+  } else if (answerAudio.ended) {
+    pauseQuestion();
+    answerAudio.currentTime = 0;
+    answerAudio.play();
+    answerAudioPlayBtn.classList.add('selected-answer__audio-play-btn_pause');
+  } else {
+    answerAudio.pause();
+    answerAudioPlayBtn.classList.remove('selected-answer__audio-play-btn_pause');
+  }
+}
+
+function pauseAnswer(){
+  answerAudio.pause();
+  answerAudioPlayBtn.classList.remove('selected-answer__audio-play-btn_pause');
+}
+
+answerAudioSeekbar.addEventListener('input', () => {
+  answerAudio.currentTime = answerAudioSeekbar.value;
+})
+
+answerAudio.addEventListener('timeupdate', updateTimeAnswer);
+
+function updateTimeAnswer() {
+  answerAudio.onloadedmetadata = function() {
+    document.querySelector('.selected-answer__audio-time-total').textContent = getTime(answerAudio.duration);
+  }
+  document.querySelector('.selected-answer__audio-time-current').textContent = getTime(answerAudio.currentTime);
+  answerAudioSeekbar.min = 0;
+  answerAudioSeekbar.max = answerAudio.duration;
+  answerAudioSeekbar.value = answerAudio.currentTime;
+  answerAudioSeekbar.style.backgroundSize = 
+    (answerAudioSeekbar.value - answerAudioSeekbar.min) * 100 / (answerAudioSeekbar.max - answerAudioSeekbar.min) + '% 100%';
+}
