@@ -362,3 +362,152 @@ function updateGalleryBird(){
   galleryAudioPlayBtn.classList.remove('gallery__audio-play-btn_pause');
   galleryAudioSeekbar.style.backgroundSize = '0% 100%';
 }
+
+// --------------------------- AUDIO ---------------------
+
+function playSoundEffect(sound) {
+  let soundEffect;
+  switch (sound) {
+    case 'right':
+      soundEffect = new Audio('assets/sounds/answer-right.mp3');
+      break;
+    case 'wrong':
+      soundEffect = new Audio('assets/sounds/answer-wrong.wav');
+      break;
+    case 'victory':
+      soundEffect = new Audio('assets/sounds/victory.wav');
+      break;
+    default:
+      console.log("no sound found for " + sound);
+  }
+  soundEffect.volume = questionAudioVolume.value;
+  soundEffect.play();
+}
+
+function updateQuestionAudio(bird) {
+  questionAudio.src = bird.audio;
+  questionAudioSeekbar.min = 0;
+  questionAudioSeekbar.max = questionAudio.duration;
+  questionAudioPlayBtn.classList.remove('question__audio-play-btn_pause');
+}
+
+questionAudioPlayBtn.addEventListener('click', playQuestion);
+
+function playQuestion(){
+  if (questionAudio.paused) {
+    pauseAnswer();
+    questionAudio.play();
+    questionAudioPlayBtn.classList.add('question__audio-play-btn_pause');
+  } else if (questionAudio.ended) {
+    pauseAnswer();
+    questionAudio.currentTime = 0;
+    questionAudio.play();
+    questionAudioPlayBtn.classList.add('question__audio-play-btn_pause');
+  } else {
+    questionAudio.pause();
+    questionAudioPlayBtn.classList.remove('question__audio-play-btn_pause');
+  }
+}
+
+function pauseQuestion(){
+  questionAudio.pause();
+  questionAudioPlayBtn.classList.remove('question__audio-play-btn_pause');
+}
+
+questionAudioSeekbar.addEventListener('input', () => {
+  questionAudio.currentTime = questionAudioSeekbar.value;
+})
+
+questionAudio.addEventListener('timeupdate', updateTimeQuestion);
+
+function updateTimeQuestion() {
+  questionAudio.onloadedmetadata = function() {
+    document.querySelector('.question__audio-time-total').textContent = getTime(questionAudio.duration);
+  }
+  document.querySelector('.question__audio-time-current').textContent = getTime(questionAudio.currentTime);
+  questionAudioSeekbar.min = 0;
+  questionAudioSeekbar.max = questionAudio.duration;
+  questionAudioSeekbar.value = questionAudio.currentTime;
+  questionAudioSeekbar.style.backgroundSize = 
+    (questionAudioSeekbar.value - questionAudioSeekbar.min) * 100 / (questionAudioSeekbar.max - questionAudioSeekbar.min) + '% 100%';
+}
+
+function getTime(time) {
+  let sec = time;
+  sec = sec % 3600;
+  let min = Math.floor(sec / 60);
+  sec = Math.floor(sec % 60);
+  if (sec.toString().length < 2) { sec = "0" + sec; }
+  if (min.toString().length < 2) { min = "0" + min; }
+  return min + ":" + sec;
+}
+
+questionAudioVolume.addEventListener('input', changeVolume);
+answerAudioVolume.addEventListener('input', changeVolume);
+galleryAudioVolume.addEventListener('input', changeVolume);
+
+function changeVolume(element) {
+  let myVol = element.target.value;
+  questionAudio.volume = myVol;
+  answerAudio.volume = myVol;
+  galleryAudio.volume = myVol;
+  questionAudioVolume.value = questionAudio.volume;
+  answerAudioVolume.value = answerAudio.volume;
+  galleryAudioVolume.value = galleryAudio.volume;
+
+  if (myVol == 0) {
+    questionAudio.muted = true;
+    answerAudio.muted = true;
+    galleryAudio.muted = true;
+  } else {
+    questionAudio.muted = false;
+    answerAudio.muted = false;
+    galleryAudio.muted = false;
+  }
+  questionAudioVolume.style.backgroundSize = (questionAudioVolume.value * 100) + '% 100%';
+  answerAudioVolume.style.backgroundSize = (answerAudioVolume.value * 100) + '% 100%';
+  galleryAudioVolume.style.backgroundSize = (galleryAudioVolume.value * 100) + '% 100%';
+  if (questionAudio.muted === true) {
+    questionAudioVolumeIco.classList.add('question__audio-volume-ico_muted');
+    answerAudioVolumeIco.classList.add('selected-answer__audio-volume-ico_muted');
+    galleryAudioVolumeIco.classList.add('gallery__audio-volume-ico_muted');
+  } else {
+    questionAudioVolumeIco.classList.remove('question__audio-volume-ico_muted');
+    answerAudioVolumeIco.classList.remove('selected-answer__audio-volume-ico_muted');
+    galleryAudioVolumeIco.classList.remove('gallery__audio-volume-ico_muted');
+  }
+}
+
+questionAudioVolumeIco.addEventListener('click', muteSound);
+answerAudioVolumeIco.addEventListener('click', muteSound);
+galleryAudioVolumeIco.addEventListener('click', muteSound);
+
+function muteSound() {
+  questionAudio.muted = !questionAudio.muted;
+  answerAudio.muted = !answerAudio.muted;
+  galleryAudio.muted = !galleryAudio.muted;
+
+  if (questionAudio.muted === true) {
+    questionAudioVolumeIco.classList.add('question__audio-volume-ico_muted');
+    questionAudioVolume.style.backgroundSize = '0% 100%';
+    questionAudioVolume.value = 0;
+    answerAudioVolumeIco.classList.add('selected-answer__audio-volume-ico_muted');
+    answerAudioVolume.style.backgroundSize = '0% 100%';
+    answerAudioVolume.value = 0;
+    galleryAudioVolumeIco.classList.add('gallery__audio-volume-ico_muted');
+    galleryAudioVolume.style.backgroundSize = '0% 100%';
+    galleryAudioVolume.value = 0;
+  } else {
+    questionAudioVolume.value = questionAudio.volume;
+    questionAudioVolume.style.backgroundSize = (questionAudioVolume.value * 100) + '% 100%';
+    answerAudioVolume.value = answerAudio.volume;
+    answerAudioVolume.style.backgroundSize = (answerAudioVolume.value * 100) + '% 100%';
+    galleryAudioVolume.value = galleryAudio.volume;
+    galleryAudioVolume.style.backgroundSize = (galleryAudioVolume.value * 100) + '% 100%';
+    if (questionAudio.volume !== 0) {
+      questionAudioVolumeIco.classList.remove('question__audio-volume-ico_muted');
+      answerAudioVolumeIco.classList.remove('selected-answer__audio-volume-ico_muted');
+      galleryAudioVolumeIco.classList.remove('gallery__audio-volume-ico_muted');
+    }
+  }
+}
